@@ -5,18 +5,24 @@ import scala.collection.mutable.ArrayBuffer
 case class Sequence[A](initialElems: A*) {
   private val elems = scala.collection.mutable.ArrayBuffer[A]()
   elems ++= initialElems
+  /*
+  ++= works like this:
+  for {
+    e <- initialElems
+  } elems += e
+   */
 
   def foreach(block: A => Unit): Unit = {
     elems.foreach(block)
   }
 
   def map[B](f: A => B): Sequence[B] = {
-    val abMap = elems.map(f).toSeq
+    val abMap = elems.map(f)
     Sequence(abMap: _*)
   }
 
   def withFilter(p: A => Boolean): Sequence[A] = {
-    val tmpArrayBuffer = elems.filter(p).toSeq
+    val tmpArrayBuffer = elems.filter(p)
     Sequence(tmpArrayBuffer: _*)
   }
 
@@ -32,7 +38,7 @@ case class Sequence[A](initialElems: A*) {
         xs += e
       }
     }
-    Sequence(xs.toSeq: _*)
+    Sequence(xs: _*)
   }
 }
 
@@ -45,9 +51,9 @@ object Main {
     println()
 
     val res = for {
-        i <- ints
-             if i > 2
-    } yield i*2
+      i <- ints
+      if i > 2
+    } yield i * 2
 
     res.foreach(println)
     println()
@@ -72,6 +78,15 @@ object Main {
 
     friendTuples.foreach(println)
     println()
+
+
+    def letterToNum(c: Char): Int = c.toLower.toInt - 'a'.toInt + 1
+    def wordToNums(s: String): IndexedSeq[Int] = s.map(letterToNum)
+
+    val words: Seq[String] = Seq("Apple", "Banana", "Orange")
+
+    println(words.map(wordToNums))
+    println(words.flatMap(wordToNums))
 
   }
 }

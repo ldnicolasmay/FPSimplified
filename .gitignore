@@ -1,4 +1,7 @@
+.idea/
 archive/
 project/
 target/
+
+*.iml
 *.pdf
