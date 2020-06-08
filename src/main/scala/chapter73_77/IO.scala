@@ -3,7 +3,7 @@ package chapter73_77
 // from https://github.com/alvinj/IOMonad/blob/master/src/main/scala/io_monad/IO.scala
 class IO[A] private(constructorCodeBlock: => A) {
 
-  def run = constructorCodeBlock
+  def run: A = constructorCodeBlock
 
   def flatMapOrig[B](f: A => IO[B]): IO[B] = IO(f(run).run)
 
